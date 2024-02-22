@@ -20,9 +20,11 @@ ENV COMPOSER_HOME /composer
 ENV PATH $PATH:/composer/vendor/bin
 
 # Node.js をインストール
-RUN curl -sL https://deb.nodesource.com/setup_20.x | bash -
+RUN curl -sL https://deb.nodesource.com/setup_current.x | bash -
 RUN apt-get install -y nodejs
-RUN npm install npm@latest -g
+RUN npm install -g npm@latest
+RUN npm install -g yarn@latest
+RUN npm install -g pnpm@latest
 
 # MailHog でメールを受信できるように設定
 RUN curl -sSL https://github.com/mailhog/mhsendmail/releases/download/v0.2.0/mhsendmail_linux_amd64 -o mhsendmail \
