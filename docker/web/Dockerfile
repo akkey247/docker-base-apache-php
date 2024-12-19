@@ -5,6 +5,9 @@ RUN apt-get update \
   && apt-get install -y vim git gh zlib1g-dev mariadb-client curl gnupg libzip-dev libicu-dev \
   && docker-php-ext-install intl zip pdo_mysql
 
+# Rewrite モジュールを有効化
+RUN a2enmod rewrite
+
 # Composer をインストール
 RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
 RUN php -r "if (hash_file('SHA384', 'composer-setup.php') === trim(file_get_contents('https://composer.github.io/installer.sig'))) { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;"
@@ -47,3 +50,7 @@ WORKDIR /var/www
 # www ディレクトリの中身をクリアするコマンドをコンテナにコピー
 COPY clear-www /usr/local/bin/
 RUN chmod 755 /usr/local/bin/clear-www
+
+# ドキュメントルートを変更するコマンドをコンテナにコピー
+COPY update-docroot /usr/local/bin/
+RUN chmod 755 /usr/local/bin/update-docroot
