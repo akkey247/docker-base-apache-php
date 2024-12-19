@@ -1,0 +1,33 @@
+#!/bin/bash
+
+# Check if a new path is provided as an argument
+if [ $# -ne 1 ]; then
+    echo "Usage: $0 <new_document_root_path>"
+    exit 1
+fi
+
+NEW_PATH="$1"
+
+# Check if running as root/sudo
+if [ "$EUID" -ne 0 ]; then
+    echo "Please run as root or with sudo"
+    exit 1
+fi
+
+# Update DocumentRoot in the configuration file
+# This will replace any path that appears after DocumentRoot
+sed -i 's|DocumentRoot.*|DocumentRoot '"$NEW_PATH"'|' /etc/apache2/sites-enabled/000-default.conf
+
+# Check if the modification was successful
+if [ $? -eq 0 ]; then
+    # Reload Apache
+    /etc/init.d/apache2 reload
+
+    echo "DocumentRoot has been updated to $NEW_PATH"
+    echo "Apache has been reloaded"
+else
+    echo "Failed to update DocumentRoot"
+    # Restore backup
+    cp /etc/apache2/sites-enabled/000-default.conf.backup /etc/apache2/sites-enabled/000-default.conf
+    exit 1
+fi
