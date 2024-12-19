@@ -14,6 +14,9 @@ if [ "$EUID" -ne 0 ]; then
     exit 1
 fi
 
+# Backup the original configuration file
+cp /etc/apache2/sites-enabled/000-default.conf /etc/apache2/sites-enabled/000-default.conf.backup
+
 # Update DocumentRoot in the configuration file
 # This will replace any path that appears after DocumentRoot
 sed -i 's|DocumentRoot.*|DocumentRoot '"$NEW_PATH"'|' /etc/apache2/sites-enabled/000-default.conf
