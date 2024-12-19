@@ -1,9 +1,9 @@
-FROM php:8.2.11-apache
+FROM php:8.3.14-apache
 
 # 各種パッケージをインストール
 RUN apt-get update \
-  && apt-get install -y vim git gh zlib1g-dev mariadb-client curl gnupg libzip-dev \
-  && docker-php-ext-install zip pdo_mysql
+  && apt-get install -y vim git gh zlib1g-dev mariadb-client curl gnupg libzip-dev libicu-dev \
+  && docker-php-ext-install intl zip pdo_mysql
 
 # Composer をインストール
 RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
